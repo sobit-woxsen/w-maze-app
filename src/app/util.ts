@@ -3,11 +3,11 @@ function seededRandom(seed: number) {
   return x - Math.floor(x);
 }
 
-export function generateMaze(x, y, seed: number) {
+export function generateMaze(x: number, y: number, seed: number) {
   // Establish variables and starting grid
   const totalCells = x * y;
-  const maze = [];
-  const unvisited = [];
+  const maze: number[][][] = [];
+  const unvisited: boolean[][] = [];
 
   for (let i = 0; i < y; i++) {
     maze[i] = [];
@@ -19,25 +19,25 @@ export function generateMaze(x, y, seed: number) {
   }
 
   // Set a random position to start from
-  let currentCell = [
+  let currentCell: [number, number] = [
     Math.floor(seededRandom(seed) * y),
     Math.floor(seededRandom(seed + 1) * x),
   ];
 
-  const path = [currentCell];
+  const path: [number, number][] = [currentCell];
   unvisited[currentCell[0]][currentCell[1]] = false;
   let visited = 1;
 
   // Loop through all available cell positions
   while (visited < totalCells) {
     // Determine neighboring cells
-    const pot = [
+    const pot: [number, number, number, number][] = [
       [currentCell[0] - 1, currentCell[1], 0, 2],
       [currentCell[0], currentCell[1] + 1, 1, 3],
       [currentCell[0] + 1, currentCell[1], 2, 0],
       [currentCell[0], currentCell[1] - 1, 3, 1],
     ];
-    const neighbors = [];
+    const neighbors: [number, number, number, number][] = [];
 
     // Determine if each neighboring cell is in game grid, and whether it has already been checked
     for (let l = 0; l < 4; l++) {
@@ -72,19 +72,21 @@ export function generateMaze(x, y, seed: number) {
     }
     // Otherwise go back up a step and keep going
     else {
-      currentCell = path.pop();
+      const prevCell = path.pop();
+      if (prevCell) {
+        currentCell = prevCell;
+      }
     }
   }
   return maze;
 }
-
 export function solve(
   maze: number[][],
   startX = 0,
   startY = 0,
   endX = maze.length - 1,
   endY = maze[0].length - 1
-) {
+): [number, number][] {
   const visited: boolean[][] = [];
   // Mark all cells as unvisited:
   for (let x = 0; x < maze.length; x++) {
@@ -124,39 +126,43 @@ export function solve(
 /*
  * Gets all of the cells we can possibly go to next.
  */
-function getOptions(x, y, maze, visited) {
-  const options = [];
+function getOptions(
+  x: number,
+  y: number,
+  maze: number[][],
+  visited: boolean[][]
+) {
+  const options: [number, number][] = [];
   const cell = maze[x][y];
   const rows = maze.length;
   const cols = maze[0].length;
 
   // can go south
-  if (x + 1 < rows && !visited[x + 1][y] && cell[2] === 1) {
+  if (x + 1 < rows && !visited[x + 1][y] && cell === 1) {
     options.push([x + 1, y]);
   }
 
   // can go east
-  if (y + 1 < cols && !visited[x][y + 1] && cell[1] === 1) {
+  if (y + 1 < cols && !visited[x][y + 1] && cell === 1) {
     options.push([x, y + 1]);
   }
 
   // can go west
-  if (y - 1 >= 0 && !visited[x][y - 1] && cell[3] === 1) {
+  if (y - 1 >= 0 && !visited[x][y - 1] && cell === 1) {
     options.push([x, y - 1]);
   }
 
   // can go north
-  if (x - 1 >= 0 && !visited[x - 1][y] && cell[0] === 1) {
+  if (x - 1 >= 0 && !visited[x - 1][y] && cell === 1) {
     options.push([x - 1, y]);
   }
 
   return options;
 }
-
 export function calculateShortestPath(maze: number[][]): number[][] {
   const rows = maze.length;
   const cols = maze[0].length;
-  const queue: [number, number, number[][]][] = [[[0, 0, [[0, 0]]]]];
+  const queue: [number, number, number[][]][] = [[0, 0, [[0, 0]]]];
   const visited = new Set<string>();
 
   const directions = [
@@ -196,6 +202,5 @@ export function calculateShortestPath(maze: number[][]): number[][] {
 
   return []; // No path found
 }
-
 // GENERATE CIRCULAR MAZE
 // src/mazeGenerator.js
