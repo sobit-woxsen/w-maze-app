@@ -1,16 +1,8 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import {
-  calculateShortestPath,
-  generateCircularMaze,
-  generateMaze,
-  solve,
-} from "@/app/util";
-import MazeGame from "./circular-maze-game";
-import CircularMaze from "./circular-mmaze";
-import CircularArray from "./circular-mmaze";
-// import "./styles.scss";
+import { calculateShortestPath, generateMaze, solve } from "@/app/util";
+import CircularMaze from "./CircularMaze";
 
 export default function Maze() {
   const [gameId, setGameId] = useState(1);
@@ -57,14 +49,6 @@ export default function Maze() {
     setEndTime(null);
     setScore(null);
   };
-
-  // useEffect(() => {
-  //   const lastRowIndex = maze.length - 1;
-  //   const lastColIndex = maze[0].length - 1;
-  //   if (userPosition[0] === lastRowIndex && userPosition[1] === lastColIndex) {
-  //     setStatus("won");
-  //   }
-  // }, [userPosition[0], userPosition[1]]);
 
   useEffect(() => {
     const lastRowIndex = maze.length - 1;
@@ -160,25 +144,6 @@ export default function Maze() {
       newPosition = [i, j - 1];
     }
 
-    // if (newPosition[0] !== i || newPosition[1] !== j) {
-    //   setUserPosition(newPosition);
-    //   setUserPath((prevPath) => {
-    //     const newPath = new Set(prevPath);
-    //     newPath.add(`${newPosition[0]}-${newPosition[1]}`);
-    //     return newPath;
-    //   });
-    // }
-
-    // if (newPosition[0] !== i || newPosition[1] !== j) {
-    //   setUserPosition(newPosition);
-    //   setUserPath((prevPath) => {
-    //     const newPath = new Map(prevPath);
-    //     const key = `${newPosition[0]}-${newPosition[1]}`;
-    //     newPath.set(key, (newPath.get(key) || 0) + 1);
-    //     return newPath;
-    //   });
-    // }
-
     if (newPosition[0] !== i || newPosition[1] !== j) {
       setUserPosition(newPosition);
       setUserPath((prevPath) => {
@@ -234,13 +199,6 @@ export default function Maze() {
 
   return (
     <div className="App" onKeyDown={handleMove} tabIndex={-1}>
-      <button
-        onClick={() => setShowShortestPath(!showShortestPath)}
-        className="w-['200px'] h-['20px] bg-slate-200 p-3 hover:bg-slate-300"
-      >
-        {showShortestPath ? "Hide" : "Show"} Shortest Path
-      </button>
-
       <div className="flex justify-between gap-5">
         <button
           onClick={() => {

@@ -200,7 +200,5 @@ export function calculateShortestPath(maze: number[][]): number[][] {
     }
   }
 
-  return []; // No path found
+  return [];
 }
-// GENERATE CIRCULAR MAZE
-// src/mazeGenerator.js
